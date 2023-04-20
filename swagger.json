@@ -1,0 +1,364 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Habilitador_Tecnologico_Api_Credito",
+    "description": "Swagger para api credito",
+    "licencia": {
+      "nombre": "MIT",
+      "url": " https://opensource.org/licenses/MIT "
+    }
+  },
+  "host": "{HOST}/api/credito",
+  "basePath": "/",
+  "paths": {
+    "/v1/mambu/client": {
+      "post": {
+        "description": "Alta cliente en mambu",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Ejemplo body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateClientMambu"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente creado"
+          },
+          "400": {
+            "description": "Error al crear al cliente"
+          }
+        }
+      }
+    },
+    "/v1/solicitudMambu": {
+      "patch": {
+        "description": "Actualiza la fecha de desembolso y agenda del préstamo",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Ejemplo body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/fechaDesembolso"
+            }
+          }
+        ],
+        "responses": {
+          "200": "Proceso exitoso",
+          "400": "Error"
+        }
+      }
+    },
+    "/v1/v2/solicitudMambu": {
+      "post": {
+        "description": "Creacion prestamo en mambu",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Ejemplo body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreatePrestamoMambu"
+            }
+          }
+        ],
+        "responses": {
+          "201": "Prestamo creado"
+        }
+      }
+    },
+    "/v1/mambu/{clienteId}": {
+      "get": {
+        "description": "Obtiene la informacion del cliente consultando API CLIENTES ",
+        "responses": {
+          "200": "Proceso exitoso"
+        }
+      }
+    },
+    "/v1/mambu/loanBySolicitud/{solicitudId}": {
+      "get": {
+        "description": "Obtiene la informacion del prestamo en mambu a partir del id de la solicitud de WF ",
+        "responses": {
+          "200": "Proceso exitoso"
+        }
+      }
+    },
+    "/v1/mambu/clienteMambu/{clientId}": {
+      "get": {
+        "description": "Obtiene la informacion del cliente en mambu a partir de su id ",
+        "responses": {
+          "200": "Proceso exitoso"
+        }
+      }
+    }
+    ,
+    "/v1/mambu/credito/obtener/{idCredito}": {
+      "get": {
+        "description": "Obtiene la información de un crédito a partir de su id",
+        "responses": {
+          "200": "Proceso exitoso",
+          "500": "Error"
+        }
+      }
+    },
+    "/v1/mambu/credito/cuenta/{idSolicitud}": {
+      "post": {
+        "description": "Obtiene la cuenta clabe y el banco que pertenecen para dicho cliente y crédito de la solicitud",
+         "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Ejemplo body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/checkAccountClabe"
+            }
+          }
+        ],
+        "responses": {
+          "200": "Proceso exitoso",
+          "500": "Error"
+        }
+      }
+    },
+    "/v1/mambu/credito/approve": {
+      "put": {
+        "description": "Su funcionalidad es aprobar un crédito, retorna un identificador de transacción con el cual se deberá de buscar en la queue de rabbit para el proceso de aprobación",
+         "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Ejemplo body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/approveCredit"
+            }
+          }
+        ],
+        "responses": {
+          "200": "idTransaccion: 1XXXXXXX",
+          "500": "Error"
+        }
+      }
+    },
+    "/v1/mambu/credito/cancel": {
+      "put": {
+        "description": "Su funcionalidad es cancelar un crédito, retorna un identificador de transacción con el cual se deberá de buscar en la queue de rabbit para el proceso de cancelación ",
+         "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Ejemplo body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/cancelCredit"
+            }
+          }
+        ],
+        "responses": {
+          "200": "idTransaccion: 1XXXXXXX",
+          "500": "Error"
+        }
+      }
+    },
+    "/v1/mambu/credito/solicitud/desembolsotmp": {
+      "put": {
+        "description": "Se encarga de cambiar el estado de la etapa con la finalidad de continuar con el flujo adecuada para el proceso de desembolso de crédito",
+         "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Ejemplo body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/creditDisbursement"
+            }
+          }
+        ],
+        "responses": {
+          "200": "Resultado de la operación exitoso",
+          "500": "Error"
+        }
+      }
+    },
+    "/v1/mambu/credito/solicitud/activartmp": {
+      "put": {
+        "description": "Activa el crédito y actualiza la base de datos al estado correspondiente",
+         "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Ejemplo body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/activateCredit"
+            }
+          }
+        ],
+        "responses": {
+          "200": "Resultado de la operación exitoso",
+          "500": "Error"
+        }
+      }
+    }    
+  },
+  "definitions": {
+    "CreateClientMambu": {
+      "type": "object",
+      "properties": {
+        "identificacion": {
+          "type": "string"
+        },
+        "idCentroBeneficio": {
+          "type": "string"
+        }
+      }
+    },
+    "fechaDesembolso": {
+      "type": "object",
+      "properties": {
+        "fechaFirma": {
+          "type": "string"
+        },
+        "horaFirma": {
+          "type": "string"
+        },
+        "sucursal": {
+          "type": "string"
+        },
+        "idSolicitud": {
+          "type": "string"
+        }
+      }
+    },
+    "CreatePrestamoMambu": {
+      "type": "object",
+      "properties": {
+        "usuario": {
+          "$ref": "#/definitions/Cliente"
+        },
+        "metadatos": {
+          "$ref": "#/definitions/idSolicitud"
+        }
+      }
+    },
+    "idSolicitud": {
+      "type": "object",
+      "properties": {
+        "idSolicitud": {
+          "type": "string"
+        }
+      }
+    },
+    "Cliente": {
+      "type": "object",
+      "properties": {
+        "cliente": {
+          "$ref": "#/definitions/idCliente"
+        }
+      }
+    },
+    "idCliente": {
+      "type": "object",
+      "properties": {
+        "idCliente": {
+          "type": "string"
+        }
+      }
+    },
+    "approveCredit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string", 
+          "required": true
+        },
+        "notes": {
+          "type": "string", 
+          "required": true
+        }
+      }
+    },
+    "cancelCredit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string", 
+          "required": true
+        },
+        "notes": {
+          "type": "string", 
+          "required": true
+        },
+        "action": {
+          "type": "string", 
+          "required": true
+        }
+      }
+    },
+    "checkAccountClabe": {
+      "type": "object",
+      "properties": {
+        "idCliente": {
+          "type": "string", 
+          "required": true
+        },
+        "idCredito": {
+          "type": "string", 
+          "required": true
+        }
+      }
+    },   
+    "creditDisbursement": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string", 
+          "required": true
+        },
+        "valueDate": {
+          "type": "string", 
+          "required": true
+        },
+        "transactionDetails": {
+          "transactionChannelId":{
+          "type": "string", 
+          "required": true
+          }
+        }
+      }
+    },
+    "activateCredit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string", 
+          "required": true
+        }
+      }
+    }
+  },
+  "etiquetas": [
+    {
+      "nombre": "Credito",
+      "descripción": "API CREDITO"
+    }
+  ],
+  "esquemas": [
+    "http"
+  ],
+  "consume": [
+    "aplicación/json"
+  ],
+  "produce": [
+    "aplicación/json"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "name": "habilitador_tecnologico_api_reportes",
+  "version": "1.0.0",
+  "description": "Encargado de generar reportes para su comprencion",
+  "main": "index.js",
+  "engines": {
+    "node": ">=14.0.0 <15.0.0",
+    "npm": ">=6.14.4 <7.0.2"
+  },
+  "scripts": {
+    "start": "babel-node src/server/index.js",
+    "debug": "nodemon --exec babel-node src/server/index.js",
+    "dev": "nodemon src/server/index.js",
+    "test": "npm run test",
+    "eslint": "eslint",
+    "lint:base": "eslint src",
+    "lint": "npm run lint:base",
+    "lint:fix": "eslint --fix --debug src",
+    "watch-prettier": "onchange '**/*.jsx' -- prettier --write {{event}} to {{changed}}",
+    "sonar": "node sonar-project.js"
+  },
+  "author": "Benito Jose Martinez Osornio",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/node": "^7.10.4",
+    "@babel/plugin-transform-runtime": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/register": "^7.10.4",
+    "@elastic/elasticsearch": "^6.8.8",
+    "@newrelic/winston-enricher": "^2.0.0",
+    "amqp-connection-manager": "^3.7.0",
+    "amqplib": "^0.10.2",
+    "babel-plugin-istanbul": "^6.0.0",
+    "body-parser": "^1.20.2",
+    "cfenv": "^1.2.2",
+    "cors": "^2.8.5",
+    "exceljs": "^4.3.0",
+    "express": "^4.18.2",
+    "express-http-context": "^1.2.4",
+    "jsonschema": "^1.2.5",
+    "log4js": "^6.1.2",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.37",
+    "node-fetch": "^2.6.7",
+    "oracledb": "^5.5.0",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.4.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-mocha": "^7.0.1",
+    "eslint-plugin-prettier": "^3.1.4"
+  }
+}
